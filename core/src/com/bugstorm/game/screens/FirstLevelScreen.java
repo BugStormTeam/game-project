@@ -29,6 +29,11 @@ public class FirstLevelScreen implements Screen{
     private Sprite flipedGroundSprite;
     private AssetManager manager;
     private FirstWorld firstWorld;
+    private static final int virtualWidth = GameProject.V_WIDTH;
+    private static final int virtualHeight = GameProject.V_HEIGHT;
+    private static final float pixelsPerMeter = GameProject.PPM;
+    private float groundSpriteWidth;
+    private float groundSpriteHeight;
 
 
 
@@ -41,12 +46,14 @@ public class FirstLevelScreen implements Screen{
         this.groundSprite = new Sprite(this.ground);
         this.flipedGroundSprite = new Sprite(this.ground);
         flipedGroundSprite.flip(true, false);
+        this.groundSpriteWidth = groundSprite.getWidth();
+        this.groundSpriteHeight = groundSprite.getHeight();
 
         this.game = game;
         this.gameCamera = new OrthographicCamera();
-        this.viewPort = new FitViewport(GameProject.V_WIDTH / GameProject.PPM , GameProject.V_HEIGHT / GameProject.PPM, gameCamera);
+        this.viewPort = new FitViewport(virtualWidth / pixelsPerMeter , virtualHeight / pixelsPerMeter, gameCamera);
 
-        gameCamera.position.set(viewPort.getWorldHeight() / 2, viewPort.getWorldHeight() / 2, 0);
+        gameCamera.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
 
         this.world = new World(new Vector2(0,-10), true);
 
@@ -86,10 +93,10 @@ public class FirstLevelScreen implements Screen{
         game.batch.setProjectionMatrix(gameCamera.combined);
         game.batch.begin();
 
-        game.batch.draw(flipedGroundSprite, -(flipedGroundSprite.getWidth() / GameProject.PPM)*2.0F, 0.0F, (flipedGroundSprite.getWidth() / GameProject.PPM)*2, flipedGroundSprite.getHeight() / GameProject.PPM);
-        game.batch.draw(groundSprite, 0.0F, 0.0F, (groundSprite.getWidth() / GameProject.PPM)*2, groundSprite.getHeight() / GameProject.PPM);
-        game.batch.draw(flipedGroundSprite, (flipedGroundSprite.getWidth() / GameProject.PPM)*2.0F, 0.0F, (flipedGroundSprite.getWidth() / GameProject.PPM)*2, flipedGroundSprite.getHeight() / GameProject.PPM);
-        game.batch.draw(groundSprite, ((groundSprite.getWidth() / GameProject.PPM)*2.0F)*2.0F, 0.0F, (groundSprite.getWidth() / GameProject.PPM)*2, groundSprite.getHeight() / GameProject.PPM);
+        game.batch.draw(flipedGroundSprite, -(groundSpriteWidth / pixelsPerMeter)*2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
+        game.batch.draw(groundSprite, 0.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
+        game.batch.draw(flipedGroundSprite, (groundSpriteWidth / pixelsPerMeter)*2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
+        game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, groundSpriteHeight / pixelsPerMeter);
         player.draw(game.batch);
 
         game.batch.end();
@@ -129,9 +136,9 @@ public class FirstLevelScreen implements Screen{
 
     public void handleInput(float delta){
         if (Gdx.input.isTouched() ) {
-                if (Gdx.input.getX() >= GameProject.V_WIDTH / 2 && player.b2body.getLinearVelocity().x <= 1.5f) {
+                if (Gdx.input.getX() >= virtualWidth / 2 && player.b2body.getLinearVelocity().x <= 1.5f) {
                     player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                } else if (Gdx.input.getX() < GameProject.V_WIDTH / 2 && player.b2body.getLinearVelocity().x >= -1.5f){
+                } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.5f){
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 }
         }
