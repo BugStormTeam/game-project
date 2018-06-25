@@ -1,4 +1,4 @@
-package scenes;
+package com.bugstorm.game.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,7 +14,7 @@ public class CreditsScreen implements Screen {
     public CreditsScreen(GameProject gameProject) {
 
         this.game = gameProject;
-        creditsNames = new Texture("creditsNames.png");
+        creditsNames = new Texture("creditsNames.PNG");
     }
 
     @Override

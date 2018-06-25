@@ -1,12 +1,13 @@
-package scenes;
+package com.bugstorm.game.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.screens.FirstLevelScreen;
 
-import helpers.GameInfo;
+import com.bugstorm.game.helpers.GameInfo;
 import sun.applet.Main;
 
 
@@ -56,7 +57,7 @@ public class MainMenu implements Screen{
             game.getBatch().draw(playButtonActive, buttonsX, buttonsY);
             if(Gdx.input.isTouched()){
                 this.dispose();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new FirstLevelScreen(game));
             }
         } else {
             game.getBatch().draw(playButtonInactive, buttonsX, buttonsY);
