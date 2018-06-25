@@ -21,29 +21,34 @@ public class Player extends Sprite {
     private TextureRegion playerStand;
     private Texture texture;
     private FirstLevelScreen screen;
+    private static final float pixelsPerMeter = GameProject.PPM;
+    private int textureWidth;
+    private int textureHeight;
 
     public Player (FirstLevelScreen screen){
         this.screen = screen;
         this.world = screen.getWorld();
         this.texture = new Texture("badlogic.jpg");
+        this.textureWidth = texture.getWidth();
+        this.textureHeight = texture.getHeight();
 
-        playerStand = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
+        playerStand = new TextureRegion(texture, 0, 0, textureWidth, textureHeight);
 
         PlayerDefinition();
 
-        setBounds(0, 0, texture.getWidth() / GameProject.PPM, texture.getHeight() / GameProject.PPM);
+        setBounds(0, 0, textureWidth / pixelsPerMeter, textureHeight / pixelsPerMeter);
         setRegion(playerStand);
     }
 
     private void PlayerDefinition(){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((texture.getWidth() / 2) / GameProject.PPM, (texture.getHeight() / 2) / GameProject.PPM);
+        bodyDef.position.set((textureWidth / 2) / pixelsPerMeter, (textureHeight / 2) / pixelsPerMeter);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(140 / GameProject.PPM);
+        shape.setRadius(140 / pixelsPerMeter);
         fixtureDef.shape = shape;
         b2body.createFixture(fixtureDef).setUserData(this);
 
