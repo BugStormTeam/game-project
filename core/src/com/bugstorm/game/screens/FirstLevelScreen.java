@@ -123,6 +123,7 @@ public class FirstLevelScreen implements Screen{
         debugRenderer.dispose();
         manager.dispose();
         ground.dispose();
+        game.dispose();
 
     }
 
