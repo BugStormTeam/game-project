@@ -41,9 +41,9 @@ public class FirstLevelScreen implements Screen{
 
     public FirstLevelScreen (GameProject game) {
         this.manager = new AssetManager();
-        manager.load("ground.png", Texture.class);
+        manager.load("firstLevelGraphic.png", Texture.class);
         manager.finishLoading();
-        this.ground = manager.get("ground.png", Texture.class);
+        this.ground = manager.get("firstLevelGraphic.png", Texture.class);
         this.groundSprite = new Sprite(this.ground);
         this.flipedGroundSprite = new Sprite(this.ground);
         flipedGroundSprite.flip(true, false);
@@ -52,7 +52,7 @@ public class FirstLevelScreen implements Screen{
 
         this.game = game;
         this.gameCamera = new OrthographicCamera();
-        this.viewPort = new FitViewport(virtualWidth / pixelsPerMeter , virtualHeight / pixelsPerMeter, gameCamera);
+        this.viewPort = new FitViewport((virtualWidth / pixelsPerMeter) * 1.3f , (virtualHeight / pixelsPerMeter) * 1.3f, gameCamera);
 
         gameCamera.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
 
@@ -94,10 +94,10 @@ public class FirstLevelScreen implements Screen{
         game.batch.setProjectionMatrix(gameCamera.combined);
         game.batch.begin();
 
-        game.batch.draw(flipedGroundSprite, -(groundSpriteWidth / pixelsPerMeter)*2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
-        game.batch.draw(groundSprite, 0.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
-        game.batch.draw(flipedGroundSprite, (groundSpriteWidth / pixelsPerMeter)*2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter)*2, groundSpriteHeight / pixelsPerMeter);
-        game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, groundSpriteHeight / pixelsPerMeter);
+        game.batch.draw(flipedGroundSprite, -(groundSpriteWidth / pixelsPerMeter) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
+        game.batch.draw(groundSprite, 0.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
+        game.batch.draw(flipedGroundSprite, (groundSpriteWidth / pixelsPerMeter) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
+        game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         player.draw(game.batch);
 
         game.batch.end();
