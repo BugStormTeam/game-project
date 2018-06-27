@@ -3,6 +3,7 @@ package com.bugstorm.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bugstorm.game.screens.MainMenu;
+import com.bugstorm.game.screens.TestScreen;
 
 
 public class GameProject extends Game {
