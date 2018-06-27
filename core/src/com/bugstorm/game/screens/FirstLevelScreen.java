@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.sprites.Player;
 import com.bugstorm.game.world.FirstWorld;
 
@@ -29,9 +30,9 @@ public class FirstLevelScreen implements Screen{
     private Sprite flipedGroundSprite;
     private AssetManager manager;
     private FirstWorld firstWorld;
-    private static final int virtualWidth = GameProject.V_WIDTH;
-    private static final int virtualHeight = GameProject.V_HEIGHT;
-    private static final float pixelsPerMeter = GameProject.PPM;
+    private static final int virtualWidth = GameInfo.V_WIDTH;
+    private static final int virtualHeight = GameInfo.V_HEIGHT;
+    private static final float pixelsPerMeter = GameInfo.PPM;
     private float groundSpriteWidth;
     private float groundSpriteHeight;
 

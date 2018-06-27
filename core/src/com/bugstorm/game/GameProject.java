@@ -2,14 +2,11 @@ package com.bugstorm.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.bugstorm.game.scenes.MainMenu;
+import com.bugstorm.game.screens.MainMenu;
 
 
 public class GameProject extends Game {
 
-	public static final int V_WIDTH = 1920;
-	public static final int V_HEIGHT = 1080;
-	public static final float PPM = 480;
 
 	public SpriteBatch batch;
 

@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.screens.FirstLevelScreen;
 
 
@@ -21,7 +22,7 @@ public class Player extends Sprite {
     private TextureRegion playerStand;
     private Texture texture;
     private FirstLevelScreen screen;
-    private static final float pixelsPerMeter = GameProject.PPM;
+    private static final float pixelsPerMeter = GameInfo.PPM;
     private int textureWidth;
     private int textureHeight;
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.screens.FirstLevelScreen;
 
 public class FirstWorld {
@@ -26,10 +27,10 @@ public class FirstWorld {
 
     public void generateGround(){
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0 / GameProject.PPM, 20 / GameProject.PPM);
+        bodyDef.position.set(0 / GameInfo.PPM, 20 / GameInfo.PPM);
         body = world.createBody(bodyDef);
 
-        shape.setAsBox(1000000 / GameProject.PPM, 10 / GameProject.PPM);
+        shape.setAsBox(1000000 / GameInfo.PPM, 10 / GameInfo.PPM);
         fixtureDef.shape = shape;
         body.createFixture(fixtureDef);
     }
