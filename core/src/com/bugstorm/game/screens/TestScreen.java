@@ -21,7 +21,7 @@ import com.bugstorm.game.helpers.GameInfo;
 
 import sun.security.pkcs11.wrapper.Constants;
 
-public class MainMenu implements Screen {
+public class TestScreen implements Screen {
     private GameProject game;
     private SpriteBatch batch;
     protected Stage stage;
@@ -32,7 +32,7 @@ public class MainMenu implements Screen {
     private Texture background;
 
 
-    public MainMenu(GameProject game)
+    public TestScreen(GameProject game)
     {
         atlas = new TextureAtlas("star-soldier/skin/star-soldier-ui.atlas");
         skin = new Skin(Gdx.files.internal("star-soldier/skin/star-soldier-ui.json"), atlas);
@@ -67,7 +67,7 @@ public class MainMenu implements Screen {
         //Create background
         //Create buttons
         TextButton playButton = new TextButton("Play", skin);
-        TextButton creditsButton = new TextButton("Credits", skin);
+        TextButton optionsButton = new TextButton("Credits", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         //Add listeners to buttons
@@ -75,12 +75,6 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ((Game)Gdx.app.getApplicationListener()).setScreen(new FirstLevelScreen(game));
-            }
-        });
-        creditsButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new CreditsScreen(game));
             }
         });
         exitButton.addListener(new ClickListener(){
@@ -93,7 +87,7 @@ public class MainMenu implements Screen {
         //Add buttons to table
         mainTable.add(playButton);
         mainTable.row();
-        mainTable.add(creditsButton);
+        mainTable.add(optionsButton);
         mainTable.row();
         mainTable.add(exitButton);
 
