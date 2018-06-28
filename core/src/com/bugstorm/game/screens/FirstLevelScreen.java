@@ -6,7 +6,11 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -14,8 +18,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bugstorm.game.GameProject;
 import com.bugstorm.game.helpers.GameInfo;
+import com.bugstorm.game.services.Animate;
 import com.bugstorm.game.sprites.Player;
 import com.bugstorm.game.world.FirstWorld;
+
 
 public class FirstLevelScreen implements Screen{
 
@@ -35,8 +41,7 @@ public class FirstLevelScreen implements Screen{
     private static final float pixelsPerMeter = GameInfo.PPM;
     private float groundSpriteWidth;
     private float groundSpriteHeight;
-
-
+    private float dt;
 
 
     public FirstLevelScreen (GameProject game) {
@@ -64,6 +69,7 @@ public class FirstLevelScreen implements Screen{
         firstWorld.generateGround();
 
         this.player = new Player(this);
+
     }
 
     @Override
@@ -78,7 +84,12 @@ public class FirstLevelScreen implements Screen{
 
         player.update(delta);
 
-        gameCamera.position.x = player.b2body.getPosition().x + 0.2f;
+        if (player.getrunningRight() == true) {
+            gameCamera.position.x = player.b2body.getPosition().x + 0.5f;
+        } else {
+            gameCamera.position.x = player.b2body.getPosition().x - 0.5f;
+        }
+
         gameCamera.update();
     }
 
@@ -132,14 +143,14 @@ public class FirstLevelScreen implements Screen{
         manager.dispose();
         ground.dispose();
         game.dispose();
-
+        game.batch.dispose();
     }
 
     public void handleInput(float delta){
         if (Gdx.input.isTouched() ) {
-                if (Gdx.input.getX() >= virtualWidth / 2 && player.b2body.getLinearVelocity().x <= 1.5f) {
+                if (Gdx.input.getX() >= virtualWidth / 2 && player.b2body.getLinearVelocity().x <= 1.3f) {
                     player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.5f){
+                } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.3f){
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 }
         }

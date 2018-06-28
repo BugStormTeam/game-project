@@ -30,7 +30,7 @@ public class FirstWorld {
         bodyDef.position.set(0 / GameInfo.PPM, 20 / GameInfo.PPM);
         body = world.createBody(bodyDef);
 
-        shape.setAsBox(1000000 / GameInfo.PPM, 10 / GameInfo.PPM);
+        shape.setAsBox(1000000 / GameInfo.PPM, 150 / GameInfo.PPM);
         fixtureDef.shape = shape;
         body.createFixture(fixtureDef);
     }
