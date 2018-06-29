@@ -1,0 +1,110 @@
+shooting.png
+size: 1155, 918
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+shoot
+  rotate: false
+  xy: 1, 1
+  size: 195, 458
+  orig: 347, 464
+  offset: 0, 1
+  index: 0
+shoot
+  rotate: false
+  xy: 917, 460
+  size: 237, 455
+  orig: 347, 464
+  offset: 16, 4
+  index: 1
+shoot
+  rotate: false
+  xy: 1, 461
+  size: 275, 456
+  orig: 347, 464
+  offset: 17, 4
+  index: 2
+shoot
+  rotate: false
+  xy: 848, 1
+  size: 271, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 3
+shoot
+  rotate: false
+  xy: 609, 460
+  size: 306, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 4
+shoot
+  rotate: false
+  xy: 529, 1
+  size: 317, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 5
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 6
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 7
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 8
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 9
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 10
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 11
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 12
+shoot
+  rotate: false
+  xy: 278, 460
+  size: 329, 457
+  orig: 347, 464
+  offset: 18, 3
+  index: 13
+shoot
+  rotate: false
+  xy: 198, 1
+  size: 329, 457
+  orig: 347, 461
+  offset: 18, 0
+  index: 1
