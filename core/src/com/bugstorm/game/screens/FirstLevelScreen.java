@@ -17,10 +17,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.entities.Bullet;
 import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.services.Animate;
 import com.bugstorm.game.sprites.Player;
 import com.bugstorm.game.world.FirstWorld;
+
+import java.util.ArrayList;
 
 
 public class FirstLevelScreen implements Screen{
@@ -42,7 +45,9 @@ public class FirstLevelScreen implements Screen{
     private float groundSpriteWidth;
     private float groundSpriteHeight;
     private float dt;
-
+    private ArrayList<Bullet> bullets;
+    private int shootTimer = 0;
+    private int shootWaitTime = 5;
 
     public FirstLevelScreen (GameProject game) {
         this.manager = new AssetManager();
@@ -54,7 +59,7 @@ public class FirstLevelScreen implements Screen{
         flipedGroundSprite.flip(true, false);
         this.groundSpriteWidth = groundSprite.getWidth();
         this.groundSpriteHeight = groundSprite.getHeight();
-
+        bullets = new ArrayList<Bullet>();
         this.game = game;
         this.gameCamera = new OrthographicCamera();
         this.viewPort = new FitViewport((virtualWidth / pixelsPerMeter) * 1.3f , (virtualHeight / pixelsPerMeter) * 1.3f, gameCamera);
@@ -97,6 +102,18 @@ public class FirstLevelScreen implements Screen{
     public void render(float delta) {
         update(delta);
 
+        ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
+        for(Bullet bullet : bullets){
+            bullet.update(delta,player.b2body.getPosition().x);
+            if(bullet.remove){
+                bulletsToRemove.add(bullet);
+            }
+        }
+        if(!bulletsToRemove.isEmpty())
+        {
+            bullets.removeAll(bulletsToRemove);
+            System.out.println("Bullets removed");
+        }
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -111,6 +128,12 @@ public class FirstLevelScreen implements Screen{
         game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         player.draw(game.batch);
 
+
+            for (Bullet bullet : bullets) {
+                bullet.render(game.getBatch());
+            }
+
+            this.shootTimer += 1;
         game.batch.end();
 
     }
@@ -153,6 +176,12 @@ public class FirstLevelScreen implements Screen{
                 } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.3f){
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 }
+                //Shooting code
+            if(this.shootTimer > this.shootWaitTime) {
+                bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
+                System.out.println("shooted bullet");
+                shootTimer = 0;
+            }
         }
     }
 
