@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bugstorm.game.GameProject;
 import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.services.Animate;
+import com.bugstorm.game.sprites.MovementExplainer;
 import com.bugstorm.game.sprites.Player;
 import com.bugstorm.game.world.FirstWorld;
 
@@ -42,6 +43,14 @@ public class FirstLevelScreen implements Screen{
     private float groundSpriteWidth;
     private float groundSpriteHeight;
     private float dt;
+    private MovementExplainer explainer;
+    private MovementExplainer explainer2;
+    private Animation<TextureRegion> dialogBox;
+    private TextureAtlas atlas;
+    private float stateTime = 0f;
+    int count = 0;
+    private Texture texture;
+    private TextureRegion frame;
 
 
     public FirstLevelScreen (GameProject game) {
@@ -70,6 +79,14 @@ public class FirstLevelScreen implements Screen{
 
         this.player = new Player(this);
 
+        this.explainer = new MovementExplainer(this, 900 / GameInfo.PPM, 250 / GameInfo.PPM);
+        this.explainer2 = new MovementExplainer(this, 2900 / GameInfo.PPM, 250 / GameInfo.PPM);
+
+        this.atlas = new TextureAtlas(Gdx.files.internal("sheets/dymek.atlas"));
+        this.dialogBox = new Animation<TextureRegion>(0.066f, atlas.findRegions("dymek"));
+        this.texture = new Texture("dymek2.png");
+
+
     }
 
     @Override
@@ -83,12 +100,16 @@ public class FirstLevelScreen implements Screen{
         world.step(1 / 60f, 6, 2);
 
         player.update(delta);
+        explainer.update(delta);
+        explainer2.update(delta);
 
-        if (player.getrunningRight() == true) {
+        /*if (player.getrunningRight() == true) {
             gameCamera.position.x = player.b2body.getPosition().x + 0.5f;
         } else {
             gameCamera.position.x = player.b2body.getPosition().x - 0.5f;
-        }
+        }*/
+
+        gameCamera.position.x = player.b2body.getPosition().x + 0.5f;
 
         gameCamera.update();
     }
@@ -97,19 +118,33 @@ public class FirstLevelScreen implements Screen{
     public void render(float delta) {
         update(delta);
 
+        stateTime += Gdx.graphics.getDeltaTime();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         debugRenderer.render(world, gameCamera.combined);
         game.batch.setProjectionMatrix(gameCamera.combined);
+
+        frame = dialogBox.getKeyFrame(stateTime, false);
+
         game.batch.begin();
 
         game.batch.draw(flipedGroundSprite, -(groundSpriteWidth / pixelsPerMeter) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         game.batch.draw(groundSprite, 0.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         game.batch.draw(flipedGroundSprite, (groundSpriteWidth / pixelsPerMeter) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
+        explainer.draw(game.batch);
+        explainer2.draw(game.batch);
         player.draw(game.batch);
+
+        if (player.getX() <= explainer.getBoundingRectangle().getX() + 300 / pixelsPerMeter && player.getX() >= explainer.getBoundingRectangle().getX() - 500 / pixelsPerMeter){
+            game.batch.draw(frame, 1000 / GameInfo.PPM, 500 / GameInfo.PPM, 500 / pixelsPerMeter, 500 / pixelsPerMeter);
+        }
+
+        if (player.getX() <= explainer2.getBoundingRectangle().getX() + 300 / pixelsPerMeter && player.getX() >= explainer2.getBoundingRectangle().getX() - 500 / pixelsPerMeter){
+            game.batch.draw(texture, 3000 / GameInfo.PPM, 500 / GameInfo.PPM, 500 / pixelsPerMeter, 300 / pixelsPerMeter);
+        }
 
         game.batch.end();
 
@@ -144,6 +179,9 @@ public class FirstLevelScreen implements Screen{
         ground.dispose();
         game.dispose();
         game.batch.dispose();
+        atlas.dispose();
+        texture.dispose();
+
     }
 
     public void handleInput(float delta){

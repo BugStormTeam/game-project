@@ -35,7 +35,7 @@ public class Animate extends Sprite{
 
         atlas = new TextureAtlas(Gdx.files.internal(path));
         runningAnimation =
-                new Animation<TextureRegion>(0.016f, atlas.findRegions("walk"), Animation.PlayMode.LOOP);
+                new Animation<TextureRegion>(0.033f, atlas.findRegions("walk"), Animation.PlayMode.LOOP);
     }
 
     public void  DrawAnimate(SpriteBatch batch, float dt) {
