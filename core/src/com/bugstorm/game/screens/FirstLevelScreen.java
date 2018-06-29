@@ -46,8 +46,9 @@ public class FirstLevelScreen implements Screen{
     private float groundSpriteHeight;
     private float dt;
     private ArrayList<Bullet> bullets;
-    private int shootTimer = 0;
+    private int shootTimer = 5;
     private int shootWaitTime = 5;
+    private static boolean shooting;
 
     public FirstLevelScreen (GameProject game) {
         this.manager = new AssetManager();
@@ -129,11 +130,11 @@ public class FirstLevelScreen implements Screen{
         player.draw(game.batch);
 
 
-            for (Bullet bullet : bullets) {
-                bullet.render(game.getBatch());
-            }
+        for (Bullet bullet : bullets) {
+            bullet.render(game.getBatch());
+        }
 
-            this.shootTimer += 1;
+        this.shootTimer += 1;
         game.batch.end();
 
     }
@@ -171,21 +172,36 @@ public class FirstLevelScreen implements Screen{
 
     public void handleInput(float delta){
         if (Gdx.input.isTouched() ) {
-                if (Gdx.input.getX() >= virtualWidth / 2 && player.b2body.getLinearVelocity().x <= 1.3f) {
+                if (Gdx.input.getX() >= virtualWidth / 2 + 900f && player.b2body.getLinearVelocity().x <= 1.3f) {
                     player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.3f){
+                    shooting = false;
+                } else if (Gdx.input.getX() < virtualWidth / 2 + 100f && player.b2body.getLinearVelocity().x >= -1.3f){
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+                    shooting = false;
                 }
-                //Shooting code
-            if(this.shootTimer > this.shootWaitTime) {
-                bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
-                System.out.println("shooted bullet");
-                shootTimer = 0;
-            }
+                else if ((player.getrunningRight() && Gdx.input.getX() > player.getX() + 1100) && (Gdx.input.getX() < player.getX() + 1300f) &&  shootTimer > this.shootWaitTime)
+                {
+                    bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
+                    System.out.println("shooted bullet");
+                    shootTimer = 0;
+                    shooting = true;
+                } else if ((!player.getrunningRight() && Gdx.input.getX() > player.getX() + 1550f) && (Gdx.input.getX() < player.getX() + 1800f) &&  shootTimer > this.shootWaitTime){
+                    bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
+                    System.out.println("shooted bullet");
+                    shootTimer = 0;
+                    shooting = true;
+                }
+
+        }
+        else{
+            shooting = false;
         }
     }
 
     public World getWorld(){
         return world;
+    }
+    public static boolean getShooting(){
+        return shooting;
     }
 }
