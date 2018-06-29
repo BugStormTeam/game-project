@@ -46,6 +46,8 @@ public class FirstLevelScreen implements Screen{
     private float groundSpriteHeight;
     private float dt;
     private ArrayList<Bullet> bullets;
+    private int shootTimer = 0;
+    private int shootWaitTime = 5;
 
     public FirstLevelScreen (GameProject game) {
         this.manager = new AssetManager();
@@ -126,10 +128,12 @@ public class FirstLevelScreen implements Screen{
         game.batch.draw(groundSprite, ((groundSpriteWidth / pixelsPerMeter) * 2.0F) * 2.0F, 0.0F, (groundSpriteWidth / pixelsPerMeter) * 2, (groundSpriteHeight / pixelsPerMeter) * 2);
         player.draw(game.batch);
 
-        for(Bullet bullet : bullets){
-            bullet.render(game.getBatch());
-        }
 
+            for (Bullet bullet : bullets) {
+                bullet.render(game.getBatch());
+            }
+
+            this.shootTimer += 1;
         game.batch.end();
 
     }
@@ -173,8 +177,11 @@ public class FirstLevelScreen implements Screen{
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                 }
                 //Shooting code
-                bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f));
+            if(this.shootTimer > this.shootWaitTime) {
+                bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
                 System.out.println("shooted bullet");
+                shootTimer = 0;
+            }
         }
     }
 

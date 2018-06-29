@@ -8,28 +8,40 @@ import com.bugstorm.game.helpers.GameInfo;
 
 public class Bullet {
 
-    public static final int SPEED = 5;
-    private static Texture texture;
+    public static final int SPEED = 7;
+    private static final Texture bulletTextureRight = new Texture("bullet.png");
+    private static final Texture bulletTextureLeft = new Texture("bulletLeft.png");
 
+    private final boolean gameDirectionRight;
     float x, y;
     public boolean remove = false;
 
-    public Bullet (float x,float y) {
+    public Bullet (float x,float y, boolean gameDirectionRight) {
         this.x = x;
         this.y = y;
+        this.gameDirectionRight = gameDirectionRight;
 
-        if (texture == null)
-            texture = new Texture("bullet.jpg");
     }
 
     public void update (float deltaTime,float playerPositionX) {
-        x += SPEED * deltaTime;
-        if (x > playerPositionX + GameInfo.V_WIDTH / 2 / GameInfo.PPM)
-            remove = true;
+        if (gameDirectionRight == true) {
+            x += SPEED * deltaTime;
+            if (x > playerPositionX + GameInfo.V_WIDTH / 2 / GameInfo.PPM + 1.f)
+                remove = true;
+        }
+        else {
+            x -= SPEED * deltaTime;
+            if (x > playerPositionX + GameInfo.V_WIDTH / 2 / GameInfo.PPM + 1.f)
+                remove = true;
+        }
     }
 
     public void render (SpriteBatch batch) {
-        batch.draw(texture, x, y,0.14f,0.10f);
+        if (gameDirectionRight) {
+            batch.draw(bulletTextureRight, x, y, 0.14f, 0.10f);
+        } else {
+            batch.draw(bulletTextureLeft, x, y,0.14f,0.10f);
+        }
     }
 
 }
