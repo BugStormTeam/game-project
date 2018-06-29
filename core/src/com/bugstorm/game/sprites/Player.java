@@ -19,7 +19,7 @@ import com.bugstorm.game.screens.FirstLevelScreen;
 
 public class Player extends Sprite {
 
-    public enum State { STANDING, RUNNING };
+    public enum State { STANDING, RUNNING, SHOOTING };
     private World world;
     public Body b2body;
     private TextureRegion playerStand;
@@ -31,9 +31,12 @@ public class Player extends Sprite {
     private State currentState;
     private State previousState;
     private Animation<TextureRegion> walkingAnimation;
+    private Animation<TextureRegion> shootingAnimation;
     private TextureAtlas atlas;
+    private TextureAtlas atlasShooting;
     private Float stateTimer;
     private boolean runningRight;
+    private float healthPoints = 100;
 
     public Player (FirstLevelScreen screen){
         this.screen = screen;
@@ -48,12 +51,21 @@ public class Player extends Sprite {
 
         playerStand = new TextureRegion(texture, 0, 0, textureWidth , textureHeight);
         atlas = new TextureAtlas(Gdx.files.internal("sheets/walk.atlas"));
+        atlasShooting = new TextureAtlas(Gdx.files.internal("sheets/shooting.atlas"));
         walkingAnimation = new Animation<TextureRegion>(0.016f, atlas.findRegions("walk"));
+        shootingAnimation = new Animation<TextureRegion>(0.02f, atlasShooting.findRegions("shoot"));
 
         PlayerDefinition();
 
         setBounds(0, 0, textureWidth / pixelsPerMeter, textureHeight / pixelsPerMeter);
         setRegion(playerStand);
+    }
+
+    private void DecreaseHealth(float value){
+        this.healthPoints -= value;
+    }
+    private void increaseHealth(float value){
+        this.healthPoints += value;
     }
 
     private void PlayerDefinition(){
@@ -86,11 +98,15 @@ public class Player extends Sprite {
 
 
     public State getState(){
-        if (b2body.getLinearVelocity().x != 0){
+        if (b2body.getLinearVelocity().x != 0 && !FirstLevelScreen.getShooting()){
             return State.RUNNING;
-        } else {
+        } else if (b2body.getLinearVelocity().x == 0 && !FirstLevelScreen.getShooting()) {
             return State.STANDING;
         }
+        else if (FirstLevelScreen.getShooting()){
+            return State.SHOOTING;
+        }
+        return null;
     }
 
     public TextureRegion getFrame(float delta){
@@ -106,6 +122,9 @@ public class Player extends Sprite {
             default:
                 region = playerStand;
                 break;
+            case SHOOTING:
+                region = shootingAnimation.getKeyFrame(stateTimer, true);
+
         }
 
         if ((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()){

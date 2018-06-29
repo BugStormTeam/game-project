@@ -17,11 +17,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bugstorm.game.GameProject;
+import com.bugstorm.game.entities.Bullet;
 import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.services.Animate;
 import com.bugstorm.game.sprites.MovementExplainer;
 import com.bugstorm.game.sprites.Player;
 import com.bugstorm.game.world.FirstWorld;
+
+import java.util.ArrayList;
 
 
 public class FirstLevelScreen implements Screen{
@@ -51,7 +54,10 @@ public class FirstLevelScreen implements Screen{
     int count = 0;
     private Texture texture;
     private TextureRegion frame;
-
+    private ArrayList<Bullet> bullets;
+    private int shootTimer = 5;
+    private int shootWaitTime = 5;
+    private static boolean shooting;
 
     public FirstLevelScreen (GameProject game) {
         this.manager = new AssetManager();
@@ -63,7 +69,7 @@ public class FirstLevelScreen implements Screen{
         flipedGroundSprite.flip(true, false);
         this.groundSpriteWidth = groundSprite.getWidth();
         this.groundSpriteHeight = groundSprite.getHeight();
-
+        bullets = new ArrayList<Bullet>();
         this.game = game;
         this.gameCamera = new OrthographicCamera();
         this.viewPort = new FitViewport((virtualWidth / pixelsPerMeter) * 1.3f , (virtualHeight / pixelsPerMeter) * 1.3f, gameCamera);
@@ -103,12 +109,6 @@ public class FirstLevelScreen implements Screen{
         explainer.update(delta);
         explainer2.update(delta);
 
-        /*if (player.getrunningRight() == true) {
-            gameCamera.position.x = player.b2body.getPosition().x + 0.5f;
-        } else {
-            gameCamera.position.x = player.b2body.getPosition().x - 0.5f;
-        }*/
-
         gameCamera.position.x = player.b2body.getPosition().x + 0.5f;
 
         gameCamera.update();
@@ -119,6 +119,19 @@ public class FirstLevelScreen implements Screen{
         update(delta);
 
         stateTime += Gdx.graphics.getDeltaTime();
+
+        ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
+        for(Bullet bullet : bullets){
+            bullet.update(delta,player.b2body.getPosition().x);
+            if(bullet.remove){
+                bulletsToRemove.add(bullet);
+            }
+        }
+        if(!bulletsToRemove.isEmpty())
+        {
+            bullets.removeAll(bulletsToRemove);
+            System.out.println("Bullets removed");
+        }
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -146,6 +159,11 @@ public class FirstLevelScreen implements Screen{
             game.batch.draw(texture, 3000 / GameInfo.PPM, 500 / GameInfo.PPM, 500 / pixelsPerMeter, 300 / pixelsPerMeter);
         }
 
+        for (Bullet bullet : bullets) {
+            bullet.render(game.getBatch());
+        }
+
+        this.shootTimer += 1;
         game.batch.end();
 
     }
@@ -186,15 +204,36 @@ public class FirstLevelScreen implements Screen{
 
     public void handleInput(float delta){
         if (Gdx.input.isTouched() ) {
-                if (Gdx.input.getX() >= virtualWidth / 2 && player.b2body.getLinearVelocity().x <= 1.3f) {
+                if (Gdx.input.getX() >= virtualWidth / 2 + 900f && player.b2body.getLinearVelocity().x <= 1.3f) {
                     player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                } else if (Gdx.input.getX() < virtualWidth / 2 && player.b2body.getLinearVelocity().x >= -1.3f){
+                    shooting = false;
+                } else if (Gdx.input.getX() < virtualWidth / 2 + 100f && player.b2body.getLinearVelocity().x >= -1.3f){
                     player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+                    shooting = false;
                 }
+                else if ((player.getrunningRight() && Gdx.input.getX() > player.getX() + 1100) && (Gdx.input.getX() < player.getX() + 1300f) &&  shootTimer > this.shootWaitTime)
+                {
+                    bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
+                    System.out.println("shooted bullet");
+                    shootTimer = 0;
+                    shooting = true;
+                } else if ((!player.getrunningRight() && Gdx.input.getX() > player.getX() + 1550f) && (Gdx.input.getX() < player.getX() + 1800f) &&  shootTimer > this.shootWaitTime){
+                    bullets.add(new Bullet(player.b2body.getPosition().x + 0.2f,player.b2body.getPosition().y + 0.2f, player.getrunningRight()));
+                    System.out.println("shooted bullet");
+                    shootTimer = 0;
+                    shooting = true;
+                }
+
+        }
+        else{
+            shooting = false;
         }
     }
 
     public World getWorld(){
         return world;
+    }
+    public static boolean getShooting(){
+        return shooting;
     }
 }

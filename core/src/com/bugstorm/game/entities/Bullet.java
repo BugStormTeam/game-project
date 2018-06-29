@@ -1,48 +1,47 @@
 package com.bugstorm.game.entities;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
-
-public class Bullet implements Pool.Poolable {
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    private Vector2 position;
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    private boolean alive;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.bugstorm.game.helpers.GameInfo;
 
 
-    public Bullet() {
-        this.position = new Vector2();
-        this.alive = false;
-    }
+public class Bullet {
 
+    public static final int SPEED = 7;
+    private static final Texture bulletTextureRight = new Texture("bullet.png");
+    private static final Texture bulletTextureLeft = new Texture("bulletLeft.png");
 
-    public void init(float posX, float posY) {
-        position.set(posX,  posY);
-        alive = true;
-    }
+    private final boolean gameDirectionRight;
+    float x, y;
+    public boolean remove = false;
 
-
-    @Override
-    public void reset() {
-        position.set(0,0);
-        alive = false;
-    }
-
-
-    public void update (float delta) {
-
-        // update bullet position
-        position.add(1*delta*60, 1*delta*60);
-
-        // if bullet is out of screen, set it to dead
+    public Bullet (float x,float y, boolean gameDirectionRight) {
+        this.x = x;
+        this.y = y;
+        this.gameDirectionRight = gameDirectionRight;
 
     }
+
+    public void update (float deltaTime,float playerPositionX) {
+        if (gameDirectionRight == true) {
+            x += SPEED * deltaTime;
+            if (x > playerPositionX + GameInfo.V_WIDTH / 2 / GameInfo.PPM + 1.f)
+                remove = true;
+        }
+        else {
+            x -= SPEED * deltaTime;
+            if (x > playerPositionX + GameInfo.V_WIDTH / 2 / GameInfo.PPM + 1.f)
+                remove = true;
+        }
+    }
+
+    public void render (SpriteBatch batch) {
+        if (gameDirectionRight) {
+            batch.draw(bulletTextureRight, x, y, 0.14f, 0.10f);
+        } else {
+            batch.draw(bulletTextureLeft, x, y,0.14f,0.10f);
+        }
+    }
+
 }

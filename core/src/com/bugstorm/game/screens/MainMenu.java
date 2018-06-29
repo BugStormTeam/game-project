@@ -54,7 +54,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
-        //Stage should controll input:
+        //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
         //Create Table
@@ -63,8 +63,6 @@ public class MainMenu implements Screen {
         mainTable.setFillParent(true);
         //Set alignment of contents in the table.
         mainTable.top();
-
-        //Create background
         //Create buttons
         TextButton playButton = new TextButton("Play", skin);
         TextButton creditsButton = new TextButton("Credits", skin);
@@ -74,18 +72,21 @@ public class MainMenu implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 ((Game)Gdx.app.getApplicationListener()).setScreen(new FirstLevelScreen(game));
             }
         });
         creditsButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 ((Game)Gdx.app.getApplicationListener()).setScreen(new CreditsScreen(game));
             }
         });
         exitButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                dispose();
                 Gdx.app.exit();
             }
         });
