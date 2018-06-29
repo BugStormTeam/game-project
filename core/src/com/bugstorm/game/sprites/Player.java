@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.bugstorm.game.GameProject;
 import com.bugstorm.game.helpers.GameInfo;
 import com.bugstorm.game.screens.FirstLevelScreen;
 
@@ -36,7 +37,6 @@ public class Player extends Sprite {
     private Float stateTimer;
     private boolean runningRight;
     private float healthPoints = 100;
-
 
     public Player (FirstLevelScreen screen){
         this.screen = screen;
@@ -70,15 +70,18 @@ public class Player extends Sprite {
 
     private void PlayerDefinition(){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((textureWidth / 2) / pixelsPerMeter, (textureHeight / 2) / pixelsPerMeter);
+        bodyDef.position.set((textureWidth / 2) / pixelsPerMeter, (textureWidth / 2) / pixelsPerMeter);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(140 / pixelsPerMeter);
+        fixtureDef.filter.categoryBits = GameProject.PLAYER_BIT;
+        fixtureDef.filter.maskBits = GameProject.GROUND_BIT;
         fixtureDef.shape = shape;
         b2body.createFixture(fixtureDef).setUserData(this);
+
 
     }
 

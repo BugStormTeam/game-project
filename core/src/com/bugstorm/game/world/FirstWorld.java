@@ -31,6 +31,8 @@ public class FirstWorld {
         body = world.createBody(bodyDef);
 
         shape.setAsBox(1000000 / GameInfo.PPM, 150 / GameInfo.PPM);
+        fixtureDef.filter.categoryBits = GameProject.GROUND_BIT;
+        fixtureDef.filter.maskBits = GameProject.PLAYER_BIT | GameProject.SIGN_BIT;
         fixtureDef.shape = shape;
         body.createFixture(fixtureDef);
     }
